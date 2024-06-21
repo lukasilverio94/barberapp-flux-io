@@ -1,0 +1,13 @@
+package com.example.demo.user;
+
+import io.fluxcapacitor.javaclient.modeling.Aggregate;
+import lombok.Builder;
+import lombok.Value;
+
+@Aggregate(searchable = true)
+@Value
+@Builder(toBuilder = true)
+public class UserProfile {
+    UserId userId;
+    UserDetails details;
+}
