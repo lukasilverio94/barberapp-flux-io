@@ -1,6 +1,8 @@
 package com.example.demo.authentication;
 
 import com.example.demo.user.UserId;
+import com.example.demo.user.UserProfile;
+import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.common.HasMessage;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.AbstractUserProvider;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.User;
@@ -20,6 +22,12 @@ public class SenderProvider extends AbstractUserProvider {
 //            return AuthenticationUtils.getSender(dm.getMetadata());
 //        }
         return super.fromMessage(message);
+    }
+
+    @Override
+    public User getUserById(Object userId) {
+        UserProfile userProfile = FluxCapacitor.loadAggregate(userId, UserProfile.class).get();
+        return userProfile == null ? null : Sender.builder().userId(userProfile.getUserId()).build();
     }
 
     @Override
