@@ -2,7 +2,11 @@ package com.example.demo.user;
 
 import io.fluxcapacitor.javaclient.test.TestFixture;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.UnauthorizedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 class UserTest {
 
@@ -34,5 +38,28 @@ class UserTest {
         testFixture.givenCommands("/user/create-viewer.json")
                 .whenQuery(new FindUsers("view"))
                 .expectResult(r -> r.size() == 1);
+    }
+
+    @Nested
+    class UsersEndpointTests {
+
+        @BeforeEach
+        void setUp() {
+            testFixture.registerHandlers(new UsersEndpoint());
+        }
+
+        @Test
+        void createUser() {
+            testFixture.whenPost("/users", new UserDetails("Me!"))
+                    .expectResult(UserId.class)
+                    .expectEvents(CreateUser.class);
+        }
+
+        @Test
+        void getUsers() {
+            testFixture.givenPost("/users", new UserDetails("Me!"))
+                    .whenGet("/users")
+                    .<List<UserProfile>>expectResult(r -> r.size() == 1);
+        }
     }
 }

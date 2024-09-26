@@ -1,0 +1,25 @@
+package com.example.demo.user;
+
+import com.example.demo.authentication.Role;
+import io.fluxcapacitor.javaclient.FluxCapacitor;
+import io.fluxcapacitor.javaclient.web.HandleGet;
+import io.fluxcapacitor.javaclient.web.HandlePost;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public class UsersEndpoint {
+    @HandlePost("/users")
+    UserId createUser(UserDetails details) {
+        var userId = new UserId(FluxCapacitor.generateId());
+        FluxCapacitor.sendCommandAndWait(new CreateUser(userId, details, Role.viewer));
+        return userId;
+    }
+
+    @HandleGet("/users")
+    List<UserProfile> getUsers() {
+        return FluxCapacitor.queryAndWait(new GetUsers());
+    }
+
+}
