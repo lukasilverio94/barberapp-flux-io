@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.authentication.Role;
 import io.fluxcapacitor.javaclient.modeling.Aggregate;
 import lombok.Builder;
 import lombok.Value;
@@ -10,4 +11,5 @@ import lombok.Value;
 public class UserProfile {
     UserId userId;
     UserDetails details;
+    Role role;
 }

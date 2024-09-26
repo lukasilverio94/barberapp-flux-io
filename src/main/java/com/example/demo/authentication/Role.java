@@ -5,10 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Role {
     viewer,
-    manager(viewer),
-    owner(manager),
-    intermediary(owner),
-    admin(manager);
+    editor(viewer),
+    admin(editor);
 
     private final Role[] assumedRoles;
 

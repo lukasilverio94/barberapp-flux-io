@@ -11,6 +11,9 @@ import lombok.Value;
 @Builder(toBuilder = true)
 public class Sender implements User {
 
+    public static final Sender system = builder()
+            .userId(new UserId("system")).userRole(Role.admin).build();
+
     public static Sender getCurrent() {
         return User.getCurrent();
     }

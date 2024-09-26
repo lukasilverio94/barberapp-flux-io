@@ -1,0 +1,8 @@
+{
+  "@class" : "com.example.demo.user.CreateUser",
+  "userId": "viewer",
+  "details": {
+    "name": "The viewer"
+  },
+  "role": "viewer"
+}
