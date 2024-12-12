@@ -22,21 +22,21 @@ class UserTest {
     @Test
     void createUserAllowedAsEditor() {
         testFixture
-                .givenCommands("/user/create-editor.json")
-                .whenCommandByUser("editor", "/user/create-viewer.json")
+                .givenCommands("/user/create-admin.json")
+                .whenCommandByUser("admin", "/user/create-viewer.json")
                 .expectEvents("/user/create-viewer.json");
     }
 
     @Test
     void createUserNotAllowedAsViewer() {
-        testFixture.whenCommandByUser("viewer", "/user/create-editor.json")
+        testFixture.whenCommandByUser("viewer", "/user/create-admin.json")
                 .expectExceptionalResult(UnauthorizedException.class);
     }
 
     @Test
-    void findUser() {
+    void getUsers() {
         testFixture.givenCommands("/user/create-viewer.json")
-                .whenQuery(new FindUsers("view"))
+                .whenQuery(new GetUsers())
                 .expectResult(r -> r.size() == 1);
     }
 

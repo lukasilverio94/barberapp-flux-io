@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Value;
 
 @Value
-@RequiresRole(Role.editor)
+@RequiresRole(Role.admin)
 public class CreateUser implements UserCommand {
     @NotNull UserId userId;
     @NotNull @Valid UserDetails details;

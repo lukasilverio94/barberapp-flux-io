@@ -19,7 +19,6 @@ public class Sender implements User {
     }
 
     @NonNull UserId userId;
-    UserId impersonator;
     Role userRole;
 
     @Override
@@ -28,9 +27,13 @@ public class Sender implements User {
         return userId.getFunctionalId();
     }
 
+    public boolean hasRole(Role role) {
+        return role.matches(userRole);
+    }
+
     @Override
     public boolean hasRole(String role) {
-        return Role.valueOf(role).matches(userRole);
+        return hasRole(Role.valueOf(role));
     }
 
     public boolean isAdmin() {

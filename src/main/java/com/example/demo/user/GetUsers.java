@@ -11,7 +11,6 @@ import java.util.List;
 public class GetUsers implements Request<List<UserProfile>> {
     @HandleQuery
     List<UserProfile> handle() {
-        return FluxCapacitor.queryAndWait(new FindUsers(null));
+        return FluxCapacitor.search(UserProfile.class).fetchAll();
     }
-
 }

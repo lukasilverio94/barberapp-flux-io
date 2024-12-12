@@ -5,23 +5,12 @@ import lombok.Getter;
 @Getter
 public enum Role {
     viewer,
-    editor(viewer),
-    admin(editor);
+    admin(viewer);
 
     private final Role[] assumedRoles;
 
     Role(Role... assumedRoles) {
         this.assumedRoles = assumedRoles;
-    }
-
-    public boolean matches(String userRole) {
-        Role role;
-        try {
-            role = Role.valueOf(userRole);
-        } catch (Exception e) {
-            return false;
-        }
-        return matches(role);
     }
 
     public boolean matches(Role userRole) {
