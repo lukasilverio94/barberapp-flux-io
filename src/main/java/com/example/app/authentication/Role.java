@@ -1,4 +1,4 @@
-package com.example.demo.authentication;
+package com.example.app.authentication;
 
 import lombok.Getter;
 

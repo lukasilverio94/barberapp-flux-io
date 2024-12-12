@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DemoApplication" type="Application" factoryName="Application">
+  <configuration default="false" name="App" type="Application" factoryName="Application">
     <envs>
       <env name="ENVIRONMENT" value="local" />
       <env name="FLUX_APPLICATION_NAME" value="Rebound" />
       <env name="FLUX_BASE_URL" value="ws://localhost:8888" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="com.example.demo.DemoApplication" />
+    <option name="MAIN_CLASS_NAME" value="com.example.app.App" />
     <module name="demo" />
     <option name="VM_PARAMETERS" value="-Xms16g -Xmx16g" />
     <extension name="coverage">

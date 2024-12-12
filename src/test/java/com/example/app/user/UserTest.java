@@ -1,4 +1,4 @@
-package com.example.demo.user;
+package com.example.app.user;
 
 import io.fluxcapacitor.javaclient.test.TestFixture;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.UnauthorizedException;

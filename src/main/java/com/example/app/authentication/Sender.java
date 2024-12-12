@@ -1,6 +1,6 @@
-package com.example.demo.authentication;
+package com.example.app.authentication;
 
-import com.example.demo.user.UserId;
+import com.example.app.user.UserId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.User;
 import lombok.Builder;

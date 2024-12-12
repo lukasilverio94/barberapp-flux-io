@@ -1,6 +1,6 @@
-package com.example.demo.user;
+package com.example.app.user;
 
-import com.example.demo.authentication.Role;
+import com.example.app.authentication.Role;
 import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.web.HandleGet;
 import io.fluxcapacitor.javaclient.web.HandlePost;

@@ -1,6 +1,6 @@
-package com.example.demo.authentication;
+package com.example.app.authentication;
 
-import com.example.demo.user.UserProfile;
+import com.example.app.user.UserProfile;
 import io.fluxcapacitor.common.MessageType;
 import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.common.HasMessage;
