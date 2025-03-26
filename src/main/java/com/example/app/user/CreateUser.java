@@ -18,9 +18,7 @@ public class CreateUser implements UserCommand {
 
     @AssertLegal
     void assertNewUser(UserProfile profile) {
-        if (profile != null) {
-            throw new IllegalCommandException("User already exists");
-        }
+        throw new IllegalCommandException("User already exists");
     }
 
     @Apply
