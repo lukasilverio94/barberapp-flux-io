@@ -15,8 +15,20 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>24</java.version>
-		<flux-capacitor.version>0.1183.0</flux-capacitor.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.flux-capacitor</groupId>
+				<artifactId>flux-capacitor-bom</artifactId>
+				<version>0.1185.0</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -27,25 +39,21 @@
 		<dependency>
 			<groupId>io.flux-capacitor</groupId>
 			<artifactId>java-client</artifactId>
-			<version>${flux-capacitor.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.flux-capacitor</groupId>
 			<artifactId>java-client</artifactId>
 			<scope>test</scope>
 			<classifier>tests</classifier>
-			<version>${flux-capacitor.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.flux-capacitor</groupId>
 			<artifactId>test-server</artifactId>
-			<version>${flux-capacitor.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.flux-capacitor</groupId>
 			<artifactId>proxy</artifactId>
-			<version>${flux-capacitor.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -75,7 +83,58 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+						<path>
+							<groupId>io.flux-capacitor</groupId>
+							<artifactId>java-client</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-maven-3</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>download-sources</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>sources</goal>
+						</goals>
+						<configuration>
+							<includeGroupIds>io.flux-capacitor</includeGroupIds>
+							<excludeClassifiers>tests</excludeClassifiers>
+							<silent>true</silent>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>

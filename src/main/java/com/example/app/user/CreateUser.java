@@ -7,15 +7,11 @@ import io.fluxcapacitor.javaclient.persisting.eventsourcing.Apply;
 import io.fluxcapacitor.javaclient.tracking.handling.IllegalCommandException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.Value;
 
-@Value
 @RequiresRole(Role.admin)
-public class CreateUser implements UserCommand {
-    @NotNull UserId userId;
-    @NotNull @Valid UserDetails details;
-    Role role;
-
+public record CreateUser(@NotNull UserId userId,
+                         @NotNull @Valid UserDetails details,
+                         Role role) implements UserCommand {
     @AssertLegal
     void assertNewUser(UserProfile profile) {
         throw new IllegalCommandException("User already exists");

@@ -7,10 +7,10 @@ import jakarta.validation.constraints.NotNull;
 
 @TrackSelf
 public interface UserCommand {
-    @NotNull UserId getUserId();
+    @NotNull UserId userId();
 
     @HandleCommand
     default void handle() {
-        FluxCapacitor.loadAggregate(getUserId()).assertAndApply(this);
+        FluxCapacitor.loadAggregate(userId()).assertAndApply(this);
     }
 }

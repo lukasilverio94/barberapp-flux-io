@@ -5,11 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.fluxcapacitor.javaclient.tracking.handling.authentication.User;
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.Value;
 
-@Value
 @Builder(toBuilder = true)
-public class Sender implements User {
+public record Sender(@NonNull UserId userId, Role userRole) implements User {
 
     public static final Sender system = builder()
             .userId(new UserId("system")).userRole(Role.admin).build();
@@ -17,9 +15,6 @@ public class Sender implements User {
     public static Sender getCurrent() {
         return User.getCurrent();
     }
-
-    @NonNull UserId userId;
-    Role userRole;
 
     @Override
     @JsonIgnore

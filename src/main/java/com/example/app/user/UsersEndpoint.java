@@ -12,7 +12,7 @@ import java.util.List;
 public class UsersEndpoint {
     @HandlePost("/users")
     UserId createUser(UserDetails details) {
-        var userId = new UserId(FluxCapacitor.generateId());
+        var userId = new UserId();
         FluxCapacitor.sendCommandAndWait(new CreateUser(userId, details, Role.viewer));
         return userId;
     }

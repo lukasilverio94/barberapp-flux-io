@@ -26,8 +26,8 @@ public class SenderProvider extends AbstractUserProvider {
     @Override
     public User getUserById(Object userId) {
         UserProfile userProfile = FluxCapacitor.loadAggregate(userId, UserProfile.class).get();
-        return userProfile == null ? null : Sender.builder().userId(userProfile.getUserId())
-                .userRole(userProfile.getRole()).build();
+        return userProfile == null ? null : Sender.builder().userId(userProfile.userId())
+                .userRole(userProfile.role()).build();
     }
 
     @Override

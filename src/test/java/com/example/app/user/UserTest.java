@@ -50,14 +50,14 @@ class UserTest {
 
         @Test
         void createUser() {
-            testFixture.whenPost("/users", new UserDetails("Me!"))
+            testFixture.whenPost("/users", "/user/new-user-details.json")
                     .expectResult(UserId.class)
                     .expectEvents(CreateUser.class);
         }
 
         @Test
         void getUsers() {
-            testFixture.givenPost("/users", new UserDetails("Me!"))
+            testFixture.givenPost("/users", "/user/new-user-details.json")
                     .whenGet("/users")
                     .<List<UserProfile>>expectResult(r -> r.size() == 1);
         }
