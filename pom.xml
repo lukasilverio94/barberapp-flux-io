@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -14,8 +14,8 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>21</java.version>
-		<flux-capacitor.version>0.1111.0</flux-capacitor.version>
+		<java.version>24</java.version>
+		<flux-capacitor.version>0.1183.0</flux-capacitor.version>
 	</properties>
 	<dependencies>
 		<dependency>
