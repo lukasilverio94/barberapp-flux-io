@@ -5,13 +5,14 @@ import com.example.app.authentication.Role;
 import io.fluxcapacitor.javaclient.modeling.AssertLegal;
 import io.fluxcapacitor.javaclient.persisting.eventsourcing.Apply;
 import io.fluxcapacitor.javaclient.tracking.handling.IllegalCommandException;
+    import io.fluxcapacitor.javaclient.tracking.handling.Request;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RequiresRole(Role.admin)
 public record CreateUser(@NotNull UserId userId,
                          @NotNull @Valid UserDetails details,
-                         Role role) implements UserCommand {
+                         Role role) implements UserCommand, Request<UserProfile> {
     @AssertLegal
     void assertNewUser(UserProfile profile) {
         throw new IllegalCommandException("User already exists");

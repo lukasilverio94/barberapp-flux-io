@@ -4,8 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-    viewer,
-    admin(viewer);
+    admin,
+    customer,
+    barber;
 
     private final Role[] assumedRoles;
 
