@@ -1,7 +1,7 @@
 package com.example.app.appointment;
 
-import com.example.app.appointment.api.common.Appointment;
 import com.example.app.appointment.api.common.AppointmentDetails;
+import com.example.app.appointment.api.common.AppointmentErrors;
 import com.example.app.appointment.query.FindAppointments;
 import com.example.app.appointment.query.GetAppointment;
 import io.fluxcapacitor.javaclient.test.TestFixture;
@@ -20,9 +20,16 @@ public class AppointmentTest {
     }
 
     @Test
-    void testRegisterInvalidAppointment() {
+    void registerInvalidAppointment() {
         testFixture.whenCommand("/appointment/register-invalid-appointment.json")
                 .expectExceptionalResult(ValidationException.class);
+    }
+
+    @Test
+    void registerAlreadyBookedTimeslot() {
+            testFixture.givenCommands("/appointment/register-appointment.json")
+                    .whenCommand("/appointment/register-appointment.json")
+                    .expectExceptionalResult(AppointmentErrors.alreadyBookedTimeslot);
     }
 
 

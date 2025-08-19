@@ -42,7 +42,7 @@ public interface AppointmentCommand {
 
     /*
     If needs to reference the request body, you have to create the method here, from what I can see.
-    If it’s a validation only against the current state of the application before the request, you can put it
+    If it’s a validation only against the current state of the application before the request, i can put it
     in the interface as a default method.
     This one specifically would just need to check if the query is finding something and add another match
     to only fetch appointments for this barber.
@@ -58,7 +58,9 @@ public interface AppointmentCommand {
                 .constraint(BetweenConstraint.between(dateTime, dateTime.plusMinutes(APPOINTMENT_DURATION_IN_MINUTES), "dateTime"))
                 .fetchAll();
 
-        System.out.println(searchResult);
+        if (!searchResult.isEmpty()) {
+            throw AppointmentErrors.alreadyBookedTimeslot;
+        }
     }
 
 
