@@ -1,0 +1,7 @@
+{
+  "@class": "RegisterAppointment",
+  "appointmentId": "myGame",
+  "requestDetails": {
+    "serviceType": "haircut"
+  }
+}
