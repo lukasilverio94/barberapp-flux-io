@@ -7,10 +7,10 @@ public interface AppointmentErrors {
 
     IllegalCommandException alreadyExists = illegalCommandException("Appointment already exists"),
             notFound = illegalCommandException("Appointment not found"),
-            outOfService = illegalCommandException("Barber not available at this time, check the schedule at homepage");
+            outOfService = illegalCommandException("Opening time is 8:00 and closing time is 18:00. Closed at Sundayse");
 
 
-    public static IllegalCommandException illegalCommandException(String message) {
+    static IllegalCommandException illegalCommandException(String message) {
         return new IllegalCommandException(message);
     }
 

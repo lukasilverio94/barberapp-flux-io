@@ -1,20 +1,22 @@
 package com.example.app.appointment.api.common;
 
+import io.fluxcapacitor.common.search.Facet;
 import io.fluxcapacitor.javaclient.modeling.Aggregate;
 import io.fluxcapacitor.javaclient.modeling.EntityId;
 import lombok.Builder;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
-@Aggregate(searchable = true, timestampPath = "")
+@Aggregate(searchable = true, collection ="appointment")
 @Builder(toBuilder = true)
 public record Appointment(
         @EntityId AppointmentId appointmentId,
-        LocalDate date,
-        LocalTime startTime,
+        LocalDateTime dateTime,
         AppointmentServiceType serviceType,
-        String barberId,
-        String customerId
+        AppointmentStatus status,
+        @Facet String barberId,
+        @Facet String customerId
 ) {
+
+
 }

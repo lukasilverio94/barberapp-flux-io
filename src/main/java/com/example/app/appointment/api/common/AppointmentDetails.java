@@ -1,16 +1,11 @@
 package com.example.app.appointment.api.common;
 
-import com.example.app.user.UserId;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
+import java.time.LocalDateTime;
 
 public record AppointmentDetails(
         String barberId,
         String customerId,
-        LocalDate date,
-        LocalTime startTime,
+        LocalDateTime dateTime,
         AppointmentServiceType serviceType
 ) {
 
