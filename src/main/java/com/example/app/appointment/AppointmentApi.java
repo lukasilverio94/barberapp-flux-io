@@ -1,14 +1,11 @@
 package com.example.app.appointment;
 
-import com.example.app.appointment.command.ApproveAppointment;
-import com.example.app.appointment.command.RejectAppointment;
-import com.example.app.appointment.query.FindAppointments;
-import com.example.app.appointment.query.GetAppointment;
-import com.example.app.appointment.command.RegisterAppointment;
-import com.example.app.appointment.command.UpdateAppointment;
-import com.example.app.appointment.api.common.AppointmentDetails;
+import com.example.app.appointment.api.common.Appointment;
+import com.example.app.appointment.command.*;
 import com.example.app.appointment.api.common.AppointmentDetailsRequest;
 import com.example.app.appointment.api.common.AppointmentId;
+import com.example.app.appointment.query.GetAppointment;
+import com.example.app.appointment.query.FindAppointments;
 import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.web.*;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +20,22 @@ import java.util.concurrent.CompletableFuture;
 public class AppointmentApi {
 
     @HandlePost
-    CompletableFuture<AppointmentId> registerAppointment(AppointmentDetailsRequest requestDetails) {
-        log.info("Entrou no metodo apply no register controller");
-        return FluxCapacitor.sendCommand(new RegisterAppointment(requestDetails));
-    }
-
-    @HandleGet("/{appointmentId}")
-    CompletableFuture<AppointmentDetails> getAppointmentById(@PathParam AppointmentId appointmentId) {
-        return FluxCapacitor.query(new GetAppointment(appointmentId));
+    AppointmentId registerAppointment(AppointmentDetailsRequest details) {
+        AppointmentId id = FluxCapacitor.generateId(AppointmentId.class);
+        FluxCapacitor.sendCommandAndWait(new CreateAppointment(id, details));
+        return id;
     }
 
     @HandleGet
-    CompletableFuture<List<AppointmentDetails>> getAppointments(@QueryParam String term) {
+    CompletableFuture<List<Appointment>> getAppointments(@QueryParam String term) {
+        System.out.println("Entrou no metodo AppointmentApi.getAppointments");
         return FluxCapacitor.query(new FindAppointments(term));
+    }
+
+    @HandleGet("/{appointmentId}")
+    Appointment getAppointment(@PathParam AppointmentId appointmentId) {
+        System.out.println("Appointment ID = " + appointmentId);
+        return FluxCapacitor.queryAndWait(new GetAppointment(appointmentId));
     }
 
     @HandlePost("/{appointmentId}")

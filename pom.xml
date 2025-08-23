@@ -17,17 +17,18 @@
 		<java.version>24</java.version>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.flux-capacitor</groupId>
-				<artifactId>flux-capacitor-bom</artifactId>
-				<version>0.1209.0</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.flux-capacitor</groupId>
+                <artifactId>flux-capacitor-bom</artifactId>
+                <version>0.1228.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
 	<dependencies>
 		<dependency>

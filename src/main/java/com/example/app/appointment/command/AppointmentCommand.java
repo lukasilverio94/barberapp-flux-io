@@ -2,10 +2,8 @@ package com.example.app.appointment.command;
 
 import com.example.app.appointment.api.common.Appointment;
 import com.example.app.appointment.api.common.AppointmentDetailsRequest;
-import com.example.app.appointment.api.common.AppointmentErrors;
+import com.example.app.appointment.api.common.ShopAppointmentErrors;
 import com.example.app.appointment.api.common.AppointmentId;
-import io.fluxcapacitor.common.api.search.constraints.BetweenConstraint;
-import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.modeling.AssertLegal;
 import io.fluxcapacitor.javaclient.publishing.routing.RoutingKey;
 import jakarta.annotation.Nullable;
@@ -29,6 +27,7 @@ public interface AppointmentCommand {
     @NotNull
     AppointmentDetailsRequest getRequestDetails(Appointment current);
 
+    // todo: remove all these asserts from here and move to the Create/update appointment records
     @AssertLegal
     default void assertIsWithinBusinessHours(@Nullable Appointment current) {
         System.out.println("Method called --> AppointmentCommand.assertIsWithinBusinessHours() ========================");
@@ -36,7 +35,7 @@ public interface AppointmentCommand {
         var isShopClosed = requestDetails.dateTime().toLocalTime().isBefore(OPENING_TIME) || requestDetails.dateTime().toLocalTime().plusMinutes(APPOINTMENT_DURATION_IN_MINUTES).isAfter(CLOSING_TIME);
         var isSunday = requestDetails.dateTime().getDayOfWeek() == DayOfWeek.SUNDAY;
         if (isSunday || isShopClosed) {
-            throw AppointmentErrors.outOfService;
+            throw ShopAppointmentErrors.outOfService;
         }
     }
 
@@ -48,17 +47,14 @@ public interface AppointmentCommand {
     to only fetch appointments for this barber.
      */
     @AssertLegal
+    // todo: create fields on the barber like opening time and closing time
     default void assertBarberIsAvailable(@Nullable Appointment current) throws ExecutionException, InterruptedException {
         System.out.println("Method called --> AppointmentCommand.assertBarberIsAvailable() ========================");
         var requestDetails = this.getRequestDetails(current);
         var dateTime = requestDetails.dateTime();
-        var searchResult = FluxCapacitor
-                .search(Appointment.class)
-                .query(requestDetails.barberId(), "barberId")
-                .constraint(BetweenConstraint.between(dateTime, dateTime.plusMinutes(APPOINTMENT_DURATION_IN_MINUTES), "dateTime"))
-                .fetchAll();
-
-        System.out.println(searchResult);
+//        if (!searchResult.isEmpty()) {
+//            throw AppointmentErrors.timeslotAlreadyTaken;
+//        }
     }
 
 
