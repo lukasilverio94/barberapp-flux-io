@@ -14,6 +14,7 @@ public record GetShop(@NotNull ShopId shopId) implements Request<Shop> {
     @HandleQuery
     Shop handleQuery() {
         return FluxCapacitor.search(Shop.class)
+                .query(shopId.toString(), "shopId")
                 .fetchFirstOrNull();
     }
 }

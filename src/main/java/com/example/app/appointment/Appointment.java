@@ -1,4 +1,4 @@
-package com.example.app.appointment.api.common;
+package com.example.app.appointment;
 
 import io.fluxcapacitor.javaclient.modeling.EntityId;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record Appointment(
         @EntityId AppointmentId appointmentId,
-        AppointmentDetailsRequest details,
-        AppointmentStatus status
+        AppointmentStatus status,
+        AppointmentDetailsRequest details
 ) {
 }

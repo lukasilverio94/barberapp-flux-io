@@ -1,11 +1,10 @@
 package com.example.app.shop;
 
-import com.example.app.appointment.api.common.Appointment;
-import com.example.app.appointment.api.common.AppointmentDetails;
-import com.example.app.appointment.api.common.AppointmentDetailsRequest;
-import com.example.app.appointment.api.common.AppointmentId;
-import com.example.app.shop.command.CreateShop;
-import com.example.app.shop.command.CreateShopAppointment;
+import com.example.app.appointment.Appointment;
+import com.example.app.appointment.AppointmentDetailsRequest;
+import com.example.app.appointment.AppointmentId;
+import com.example.app.appointment.AppointmentStatus;
+import com.example.app.shop.command.*;
 import com.example.app.shop.model.Shop;
 import com.example.app.shop.model.ShopDetails;
 import com.example.app.shop.model.ShopId;
@@ -25,10 +24,15 @@ import java.util.List;
 public class ShopApi {
 
     @HandlePost
-    ShopId registerShop(ShopDetails details) {
+    ShopDetails registerShop(ShopDetails details) {
         ShopId id = FluxCapacitor.generateId(ShopId.class);
-        FluxCapacitor.sendCommandAndWait(new CreateShop(id, details));
-        return id;
+        Shop createdShop = FluxCapacitor.sendCommandAndWait(new CreateShop(id, details));
+        return new ShopDetails(
+                createdShop.shopId().toString(),
+                createdShop.details().name(),
+                createdShop.details().openingTime(),
+                createdShop.details().closingTime()
+        );
     }
 
     @HandleGet
@@ -41,24 +45,41 @@ public class ShopApi {
         return FluxCapacitor.queryAndWait(new GetShop(shopId));
     }
 
+    @HandlePost("/{shopId}")
+    ShopDetails updateShop(@PathParam ShopId shopId, ShopDetails details) {
+        Shop updatedShop = FluxCapacitor.sendCommandAndWait(new UpdateShop(shopId, details));
+        return new ShopDetails(
+                updatedShop.shopId().toString(),
+                updatedShop.details().name(),
+                updatedShop.details().openingTime(),
+                updatedShop.details().closingTime()
+        );
+    }
+
     @HandlePost("/{shopId}/appointments")
-    ShopId createShopAppointment(@PathParam ShopId shopId, AppointmentDetailsRequest details) {
+    Shop createShopAppointment(@PathParam ShopId shopId, AppointmentDetailsRequest details) {
         AppointmentId appointmentId = FluxCapacitor.generateId(AppointmentId.class);
-        return FluxCapacitor.sendCommandAndWait(new CreateShopAppointment(shopId, appointmentId, details));
+        return FluxCapacitor.sendCommandAndWait(new CreateAppointment(shopId, appointmentId, details));
     }
 
     @HandleGet("/{shopId}/appointments")
     List<Appointment> getShopAppointments(@PathParam ShopId shopId) {
         return FluxCapacitor.queryAndWait(new ListShopAppointments(shopId));
     }
-//
-//    @HandleGet("/{shopId}")
-//    Shop getAppointment(@PathParam ShopId shopId) {
-//        return FluxCapacitor.queryAndWait();
-//    }
-//
-//    @HandlePost("/{shopId}")
-//    CompletableFuture<ShopId> updateShop(@PathParam ShopId shopId, Shop requestDetails) {
-//        return FluxCapacitor.sendCommand();
-//    }
+
+    @HandleDelete("/{shopId}")
+    void deleteShop(@PathParam ShopId shopId) {
+        FluxCapacitor.sendCommandAndWait(new DeleteShop(shopId));
+    }
+
+
+    // Dynamic -> pass on last parameter (accepted, requested or cancelled)
+    @HandlePatch("/{shopId}/appointments/{appointmentId}/{appointmentStatus}")
+    void changeAppointmentStatus(
+            @PathParam ShopId shopId,
+            @PathParam AppointmentId appointmentId,
+            @PathParam AppointmentStatus appointmentStatus) {
+        FluxCapacitor.sendCommandAndWait(new UpdatedShopAppointmentStatus(shopId, appointmentId, appointmentStatus));
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.app.shop.command;
 
+import com.example.app.shop.model.Shop;
 import com.example.app.shop.model.ShopId;
 import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.tracking.Consumer;
@@ -14,8 +15,7 @@ public interface ShopCommand {
     @NotNull ShopId shopId();
 
     @HandleCommand
-    default ShopId handle() {
-        FluxCapacitor.loadAggregate(shopId()).assertAndApply(this);
-        return shopId();
+    default Shop handle() {
+        return FluxCapacitor.loadAggregate(shopId()).assertAndApply(this).get();
     }
 }

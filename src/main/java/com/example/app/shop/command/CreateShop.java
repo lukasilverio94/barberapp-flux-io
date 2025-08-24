@@ -16,6 +16,7 @@ public record CreateShop(ShopId shopId,
     Shop apply() {
         log.info("===========================Entrou no método CreateShop.apply()===========================");
         return Shop.builder()
+                .shopId(shopId)
                 .details(details)
                 .build();
     }

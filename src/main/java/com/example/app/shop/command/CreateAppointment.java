@@ -1,6 +1,7 @@
 package com.example.app.shop.command;
 
-import com.example.app.appointment.api.common.*;
+import com.example.app.appointment.*;
+import com.example.app.shop.ShopErrors;
 import com.example.app.shop.model.Shop;
 import com.example.app.shop.model.ShopId;
 import io.fluxcapacitor.javaclient.modeling.AssertLegal;
@@ -11,18 +12,20 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
+import static io.fluxcapacitor.javaclient.modeling.AssertLegal.HIGHEST_PRIORITY;
+
 @Slf4j
-public record CreateShopAppointment(
+public record CreateAppointment(
         ShopId shopId,
         AppointmentId appointmentId,
         AppointmentDetailsRequest details) implements ShopCommand {
 
-    @AssertLegal
-    void assertShopExists(@Null Shop shop) {
+    @AssertLegal(priority = HIGHEST_PRIORITY)
+    void assertShopExists(@Nullable Shop current) {
         log.info("===========================Entrou no método CreateShopAppointment.assertShopExists()===========================");
 
-        if (shop == null) {
-            throw ShopAppointmentErrors.notFound;
+        if (current == null) {
+            throw ShopErrors.notFound;
         }
     }
 
@@ -32,14 +35,14 @@ public record CreateShopAppointment(
         LocalDateTime requestedDateTime = details.dateTime();
 
         if (requestedDateTime.isBefore(LocalDateTime.now())) {
-            throw ShopAppointmentErrors.invalidDatetime;
+            throw AppointmentErrors.invalidDatetime;
         }
     }
 
     @AssertLegal
     void assertIsWithinBusinessHours(@Nullable Shop current) {
         log.info("===========================Entrou no método CreateShopAppointment.assertIsWithinBusinessHours()===========================");
-        if (current == null || current.appointments() == null) {
+        if (current.appointments() == null) {
             return;
         }
 
@@ -50,7 +53,7 @@ public record CreateShopAppointment(
         var closing = current.details().closingTime();
 
         if (requestedStartTime.toLocalTime().isBefore(opening) || requestedEndTime.toLocalTime().isAfter(closing)) {
-            throw ShopAppointmentErrors.outOfService;
+            throw ShopErrors.outOfService;
         }
     }
 
@@ -58,7 +61,7 @@ public record CreateShopAppointment(
     void assertTimeslotAvailable(@Nullable Shop current)  {
         log.info("===========================Entrou no método CreateShopAppointment.assertTimeslotAvailable()===========================");
 
-        if (current == null || current.appointments() == null) {
+        if ( current.appointments() == null) {
             return;
         }
 
@@ -66,14 +69,17 @@ public record CreateShopAppointment(
         LocalDateTime requestedEndtime = requestedStartTime.plusMinutes(30);
 
         for (Appointment appt: current.appointments()) {
-            if (appt == null || appt.details() == null || appt.details().dateTime() == null) {
+            if (appt.status() != AppointmentStatus.accepted) {
                 continue;
             }
+
             LocalDateTime existingStart = appt.details().dateTime();
             LocalDateTime existingEnd = existingStart.plusMinutes(30);
 
             if (requestedStartTime.isBefore(existingEnd) && requestedEndtime.isAfter(existingStart)) {
-                throw ShopAppointmentErrors.timeslotUnavailable;
+                var exc = AppointmentErrors.timeslotUnavailable;
+                log.error("User tried to create appointment but the timeslot is not available", exc);
+                throw exc;
             }
         }
     }

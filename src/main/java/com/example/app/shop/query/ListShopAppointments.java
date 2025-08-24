@@ -1,7 +1,6 @@
 package com.example.app.shop.query;
 
-import com.example.app.appointment.api.common.Appointment;
-import com.example.app.appointment.api.common.AppointmentDetails;
+import com.example.app.appointment.Appointment;
 import com.example.app.shop.model.ShopId;
 import io.fluxcapacitor.javaclient.FluxCapacitor;
 import io.fluxcapacitor.javaclient.tracking.handling.HandleQuery;

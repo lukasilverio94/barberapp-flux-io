@@ -1,4 +1,4 @@
-package com.example.app.appointment.api.common;
+package com.example.app.appointment;
 
 import jakarta.validation.constraints.NotNull;
 
