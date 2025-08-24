@@ -16,9 +16,16 @@ public class AppointmentTest {
     }
 
     @Test
-    void testRegisterInvalidAppointment() {
+    void registerInvalidAppointment() {
         testFixture.whenCommand("/appointment/register-invalid-appointment.json")
                 .expectExceptionalResult(ValidationException.class);
+    }
+
+    @Test
+    void registerAlreadyBookedTimeslot() {
+            testFixture.givenCommands("/appointment/register-appointment.json")
+                    .whenCommand("/appointment/register-appointment.json")
+                    .expectExceptionalResult(AppointmentErrors.alreadyBookedTimeslot);
     }
 
 
