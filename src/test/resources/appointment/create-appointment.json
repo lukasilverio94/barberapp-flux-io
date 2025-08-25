@@ -1,0 +1,11 @@
+{
+  "@class": "CreateAppointment",
+  "appointmentId": "a1",
+  "shopId": "s1",
+  "status": "requested",
+  "details": {
+    "userId": "cddfe948b7c643e58757fd825f94348f",
+    "dateTime": "2056-08-25T13:30:00",
+    "serviceType": "beard"
+  }
+}

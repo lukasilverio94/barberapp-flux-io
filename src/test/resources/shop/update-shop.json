@@ -1,0 +1,7 @@
+{
+  "@class": "UpdateShop",
+  "shopId": "s1",
+  "details": {
+    "name": "shop name updated"
+  }
+}

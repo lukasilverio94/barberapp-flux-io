@@ -1,9 +1,6 @@
 package com.example.app.shop;
 
-import com.example.app.appointment.Appointment;
-import com.example.app.appointment.AppointmentDetailsRequest;
-import com.example.app.appointment.AppointmentId;
-import com.example.app.appointment.AppointmentStatus;
+import com.example.app.appointment.*;
 import com.example.app.shop.command.*;
 import com.example.app.shop.model.Shop;
 import com.example.app.shop.model.ShopDetails;
@@ -57,10 +54,22 @@ public class ShopApi {
     }
 
     @HandlePost("/{shopId}/appointments")
-    Shop createShopAppointment(@PathParam ShopId shopId, AppointmentDetailsRequest details) {
+    Appointment createShopAppointment(@PathParam ShopId shopId, AppointmentDetailsRequest details) {
         AppointmentId appointmentId = FluxCapacitor.generateId(AppointmentId.class);
-        return FluxCapacitor.sendCommandAndWait(new CreateAppointment(shopId, appointmentId, details));
+        Shop createdShop = FluxCapacitor.sendCommandAndWait(new CreateAppointment(shopId, appointmentId, details));
+        var createdAppointment = createdShop.appointments().stream().filter(res -> res.appointmentId().equals(appointmentId))
+                .findFirst();
+
+        return createdAppointment.orElseThrow(() -> AppointmentErrors.genericError);
     }
+
+//    @HandlePost("/{shopId}/appointments")
+//    AppointmentId createShopAppointment(@PathParam ShopId shopId, AppointmentDetailsRequest details) {
+//        AppointmentId appointmentId = FluxCapacitor.generateId(AppointmentId.class);
+//        FluxCapacitor.sendCommandAndWait(new CreateAppointment(shopId, appointmentId, details));
+//      return appointmentId;
+//    }
+
 
     @HandleGet("/{shopId}/appointments")
     List<Appointment> getShopAppointments(@PathParam ShopId shopId) {
@@ -75,11 +84,11 @@ public class ShopApi {
 
     // Dynamic -> pass on last parameter (accepted, requested or cancelled)
     @HandlePatch("/{shopId}/appointments/{appointmentId}/{appointmentStatus}")
-    void changeAppointmentStatus(
+    Shop changeAppointmentStatus(
             @PathParam ShopId shopId,
             @PathParam AppointmentId appointmentId,
             @PathParam AppointmentStatus appointmentStatus) {
-        FluxCapacitor.sendCommandAndWait(new UpdatedShopAppointmentStatus(shopId, appointmentId, appointmentStatus));
+        return FluxCapacitor.sendCommandAndWait(new UpdatedShopAppointmentStatus(shopId, appointmentId, appointmentStatus));
     }
 
 }

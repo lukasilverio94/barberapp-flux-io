@@ -22,8 +22,6 @@ public record CreateAppointment(
 
     @AssertLegal(priority = HIGHEST_PRIORITY)
     void assertShopExists(@Nullable Shop current) {
-        log.info("===========================Entrou no método CreateShopAppointment.assertShopExists()===========================");
-
         if (current == null) {
             throw ShopErrors.notFound;
         }
@@ -31,7 +29,6 @@ public record CreateAppointment(
 
     @AssertLegal
     void assertIsNotInPast(@Null Shop current) {
-        log.info("===========================Entrou no método CreateShopAppointment.assertIsNotINPast()===========================");
         LocalDateTime requestedDateTime = details.dateTime();
 
         if (requestedDateTime.isBefore(LocalDateTime.now())) {
@@ -41,7 +38,6 @@ public record CreateAppointment(
 
     @AssertLegal
     void assertIsWithinBusinessHours(@Nullable Shop current) {
-        log.info("===========================Entrou no método CreateShopAppointment.assertIsWithinBusinessHours()===========================");
         if (current.appointments() == null) {
             return;
         }
@@ -59,8 +55,6 @@ public record CreateAppointment(
 
     @AssertLegal
     void assertTimeslotAvailable(@Nullable Shop current)  {
-        log.info("===========================Entrou no método CreateShopAppointment.assertTimeslotAvailable()===========================");
-
         if ( current.appointments() == null) {
             return;
         }
@@ -72,6 +66,7 @@ public record CreateAppointment(
             if (appt.status() != AppointmentStatus.accepted) {
                 continue;
             }
+            log.info("Checking overlap, existing appointments: {}", current.appointments());
 
             LocalDateTime existingStart = appt.details().dateTime();
             LocalDateTime existingEnd = existingStart.plusMinutes(30);
@@ -86,7 +81,6 @@ public record CreateAppointment(
 
     @Apply
     Appointment apply() {
-        log.info("===========================Entrou no método CreateShopAppointment.apply()===========================");
         return Appointment.builder()
                 .appointmentId(appointmentId)
                 .details(details)

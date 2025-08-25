@@ -1,0 +1,6 @@
+{
+  "@class": "UpdatedShopAppointmentStatus",
+  "appointmentId": "a1",
+  "shopId": "s1",
+  "appointmentStatus": "cancelled"
+}

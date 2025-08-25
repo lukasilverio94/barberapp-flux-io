@@ -1,0 +1,9 @@
+{
+  "@class": "CreateAppointment",
+  "shopId": "s1",
+  "details": {
+    "userId": "cddfe948b7c643e58757fd825f94348f",
+    "dateTime": "1994-08-25T13:40:00",
+    "serviceType": "beard"
+  }
+}
